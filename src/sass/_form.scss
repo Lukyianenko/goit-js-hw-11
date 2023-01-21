@@ -1,0 +1,33 @@
+input {
+    width: 300px;
+    height: 30px;
+
+}
+
+body {
+    text-align: center;
+
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #5dec1b;
+}
+
+button {
+    padding: 5px 8px;
+    background-color: #aa13b2;
+    color: #fbff00;
+    border: 2px solid #aa13b2;
+    border-radius: 30px;
+    margin-left: 15px;
+}
+
+.image {
+    width: 25px;
+    height: 25px;
+}
