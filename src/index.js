@@ -76,7 +76,7 @@ function creatMurkup(arrey) {
         comments,
         downloads
     }) => {
-        return murkup = `
+        return `
         <a href="${largeImageURL}">
         <div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
