@@ -1,10 +1,12 @@
 import axios from "axios";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const formEl = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const buttonMore = document.querySelector('.load-more');
+const perPages = 40; 
 
 const KEY = '33017005-3089560dbf89e85a2a48421c2';
 const URL = 'https://pixabay.com/api/';
@@ -20,22 +22,17 @@ function onSearchImage(evt) {
     imageName = '';
     gallery.innerHTML = '';
     page = 1;
-    buttonMore.removeEventListener('click', onLoadMore);
-
+   
     imageName = evt.currentTarget.elements.searchQuery.value;
+    evt.currentTarget.elements.searchQuery.value = '';
 
     loadImages();
 
-    buttonMore.addEventListener('click', onLoadMore);
-
-  function onLoadMore() {
-      console.log(page);
-      loadImages();
-    }
+    buttonMore.addEventListener('click', loadImages);
 
   async function loadImages() {
       try {
-        const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`);
+        const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPages}`);
 
         const cardArr = responses.data.hits;
 
@@ -50,10 +47,12 @@ function onSearchImage(evt) {
         }
         
         creatMurkup(cardArr);
-        
+        // var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
+
         buttonMore.classList.remove('is-hidden'); 
-        console.log(responses.data.totalHits);
-        if(page ===  responses.data.totalHits % 40 ) {
+        const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
+
+        if(page ===  pages) {
           buttonMore.classList.add('is-hidden');
           Notify.info("We're sorry, but you've reached the end of search results.");
         }
@@ -62,7 +61,6 @@ function onSearchImage(evt) {
 }
     }
 
-  
 }
 
 
@@ -77,8 +75,9 @@ function creatMurkup(arrey) {
         downloads
     }) => {
         return murkup = `
+        <a href="${largeImageURL} onclick="return false">
         <div class="photo-card">
-        <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
+        <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
       <b>Likes: ${likes}</b>
@@ -93,7 +92,8 @@ function creatMurkup(arrey) {
       <b>Downloads: ${downloads}</b>
     </p>
   </div>
-</div>`
+</div>
+</a>`
     }).join('');
 
     gallery.insertAdjacentHTML("beforeend", cards);
