@@ -47,8 +47,10 @@ function onSearchImage(evt) {
         }
         
         creatMurkup(cardArr);
+        
         var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
-
+        galleryImg.refresh();
+        
         buttonMore.classList.remove('is-hidden'); 
         const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
 
