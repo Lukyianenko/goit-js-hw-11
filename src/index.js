@@ -47,7 +47,7 @@ function onSearchImage(evt) {
         }
         
         creatMurkup(cardArr);
-        // var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
+        var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
 
         buttonMore.classList.remove('is-hidden'); 
         const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
@@ -75,7 +75,7 @@ function creatMurkup(arrey) {
         downloads
     }) => {
         return murkup = `
-        <a href="${largeImageURL} onclick="return false">
+        <a href="${largeImageURL}">
         <div class="photo-card">
         <img src="${webformatURL}" alt="${tags}" loading="lazy" />
   <div class="info">
