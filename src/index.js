@@ -13,12 +13,14 @@ let page = 1;
 
 formEl.addEventListener('submit', onSearchImage);
 
+
 function onSearchImage(evt) {
     evt.preventDefault();
 
     imageName = '';
     gallery.innerHTML = '';
     page = 1;
+    buttonMore.removeEventListener('click', onLoadMore);
 
     imageName = evt.currentTarget.elements.searchQuery.value;
 
@@ -33,7 +35,7 @@ function onSearchImage(evt) {
 
   async function loadImages() {
       try {
-        const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=100`);
+        const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`);
 
         const cardArr = responses.data.hits;
 
@@ -50,7 +52,8 @@ function onSearchImage(evt) {
         creatMurkup(cardArr);
         
         buttonMore.classList.remove('is-hidden'); 
-        if(page === responses.data.totalHits / 100 + 1) {
+        console.log(responses.data.totalHits);
+        if(page ===  responses.data.totalHits % 40 ) {
           buttonMore.classList.add('is-hidden');
           Notify.info("We're sorry, but you've reached the end of search results.");
         }
