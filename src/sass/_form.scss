@@ -6,7 +6,8 @@ input {
 
 body {
     text-align: center;
-
+    justify-content: center;
+    background-color: rgb(241, 254, 174);
 }
 
 .search-form {
@@ -27,7 +28,36 @@ button {
     margin-left: 15px;
 }
 
+button.is-hidden {
+    display: none;
+}
+
 .image {
     width: 25px;
     height: 25px;
+}
+
+img {
+    width: 440px;
+    height: 300px;
+    display: block;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.info {
+    display: flex;
+    background-color: rgb(156, 255, 110);
+    gap: 20px;
+    height: 90px;
+}
+
+.photo-card {
+    width: 440px;
 }
