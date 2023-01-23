@@ -1,10 +1,13 @@
-
+import axios from "axios";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
 const perPages = 40; 
 const KEY = '33017005-3089560dbf89e85a2a48421c2';
 const URL = 'https://pixabay.com/api/';
 
-export async function loadImages() {
+export default async function loadImages(imageName, page, creatMurkup, buttonMore) {
     try {
         const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPages}`);
 

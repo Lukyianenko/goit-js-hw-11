@@ -1,3 +1,4 @@
+// import loadImages from './js/search-Image'
 import axios from "axios";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import SimpleLightbox from "simplelightbox";
@@ -14,7 +15,40 @@ let imageName = '';
 let page = 1;
 
 formEl.addEventListener('submit', onSearchImage);
+buttonMore.addEventListener('click', loadImages);
 
+async function loadImages() {
+  try {
+      const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPages}`);
+
+      const cardArr = responses.data.hits;
+
+      if(page === 1 && cardArr.length !== 0) {
+        Notify.success(`Hooray! We found ${responses.data.totalHits} images.`);
+      }
+      
+      page+=1;
+
+      if(cardArr.length === 0) {
+        Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+      }
+      
+      creatMurkup(cardArr);
+      
+      var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
+      galleryImg.refresh();
+      
+      buttonMore.classList.remove('is-hidden'); 
+      const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
+
+      if(page ===  pages) {
+        buttonMore.classList.add('is-hidden');
+        Notify.info("We're sorry, but you've reached the end of search results.");
+      }
+} catch(err){
+  console.log(err);
+}
+}
 
 function onSearchImage(evt) {
     evt.preventDefault();
@@ -30,45 +64,45 @@ function onSearchImage(evt) {
     }
     evt.currentTarget.elements.searchQuery.value = '';
 
-    loadImages();
+    loadImages(imageName, page, creatMurkup, buttonMore);
 
-    buttonMore.addEventListener('click', loadImages);
+    
 
-  async function loadImages() {
-      try {
-        const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPages}`);
+//   async function loadImages() {
+//       try {
+//         const responses = await axios.get(`${URL}?key=${KEY}&q=${imageName}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=${perPages}`);
 
-        const cardArr = responses.data.hits;
+//         const cardArr = responses.data.hits;
 
-        if(page === 1 && cardArr.length !== 0) {
-          Notify.success(`Hooray! We found ${responses.data.totalHits} images.`);
-        }
+//         if(page === 1 && cardArr.length !== 0) {
+//           Notify.success(`Hooray! We found ${responses.data.totalHits} images.`);
+//         }
         
-        page+=1;
+//         page+=1;
 
-        if(cardArr.length === 0) {
-          Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        }
+//         if(cardArr.length === 0) {
+//           Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+//         }
         
-        creatMurkup(cardArr);
+//         creatMurkup(cardArr);
         
-        var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
-        galleryImg.refresh();
+//         var galleryImg = new SimpleLightbox('.gallery a', {captionsData: 'alt', captionDelay: 250});
+//         galleryImg.refresh();
         
-        buttonMore.classList.remove('is-hidden'); 
-        const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
+//         buttonMore.classList.remove('is-hidden'); 
+//         const pages = ( responses.data.totalHits - responses.data.totalHits % perPages ) / perPages + 2;
 
-        if(page ===  pages) {
-          buttonMore.classList.add('is-hidden');
-          if(cardArr.length !== 0) {
-            Notify.info("We're sorry, but you've reached the end of search results.");
-          }
+//         if(page ===  pages) {
+//           buttonMore.classList.add('is-hidden');
+//           if(cardArr.length !== 0) {
+//             Notify.info("We're sorry, but you've reached the end of search results.");
+//           }
           
-        }
-} catch(err){
-    console.log(err);
-}
-    }
+//         }
+// } catch(err){
+//     console.log(err);
+// }
+//     }
 
 }
 
