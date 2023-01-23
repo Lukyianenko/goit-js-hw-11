@@ -43,8 +43,10 @@ async function loadImages() {
 
       if(page ===  pages) {
         buttonMore.classList.add('is-hidden');
-        Notify.info("We're sorry, but you've reached the end of search results.");
-      }
+        if(cardArr.length !== 0) {
+          Notify.info("We're sorry, but you've reached the end of search results.");
+        }
+    }
 } catch(err){
   console.log(err);
 }
