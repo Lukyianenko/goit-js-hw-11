@@ -23,7 +23,11 @@ function onSearchImage(evt) {
     gallery.innerHTML = '';
     page = 1;
    
-    imageName = evt.currentTarget.elements.searchQuery.value;
+    imageName = evt.currentTarget.elements.searchQuery.value.trim();
+
+    if(imageName === '') {
+      return
+    }
     evt.currentTarget.elements.searchQuery.value = '';
 
     loadImages();
@@ -56,7 +60,10 @@ function onSearchImage(evt) {
 
         if(page ===  pages) {
           buttonMore.classList.add('is-hidden');
-          Notify.info("We're sorry, but you've reached the end of search results.");
+          if(cardArr.length !== 0) {
+            Notify.info("We're sorry, but you've reached the end of search results.");
+          }
+          
         }
 } catch(err){
     console.log(err);
