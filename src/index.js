@@ -14,10 +14,9 @@ let page = 1;
 formEl.addEventListener('submit', onSearchImage);
 buttonMore.addEventListener('click', onLoadImage);
 
-function onLoadImage() {
-  loadImages(imageName, page).then(responses => { 
+async function onLoadImage() {
+  await loadImages(imageName, page).then(responses => { 
     const cardArr = responses.data.hits;
-  console.log(cardArr);
 
     if(page === 1 && cardArr.length !== 0) {
       Notify.success(`Hooray! We found ${responses.data.totalHits} images.`);
@@ -43,7 +42,8 @@ function onLoadImage() {
         Notify.info("We're sorry, but you've reached the end of search results.");
       }
     }
-  });
+  })
+  .catch(err => console.log(err));
 }
 
 function onSearchImage(evt) {
